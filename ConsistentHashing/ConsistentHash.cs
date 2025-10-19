@@ -7,7 +7,10 @@ using System.Text;
 public class ConsistentHash<T> where T : notnull
 {
     private readonly SortedDictionary<int, T> _ring = new SortedDictionary<int, T>();
+    private readonly HashSet<T> _nodes = new HashSet<T>();
     private readonly int _replicas;
+
+    public int NodeCount => _nodes.Count;
 
     public ConsistentHash(int replicas)
     {
@@ -16,6 +19,7 @@ public class ConsistentHash<T> where T : notnull
 
     public void AddNode(T node)
     {
+        _nodes.Add(node);
         for (int i = 0; i < _replicas; i++)
         {
             int hash = GetHash(node.ToString() + i);
@@ -25,6 +29,7 @@ public class ConsistentHash<T> where T : notnull
 
     public void RemoveNode(T node)
     {
+        _nodes.Remove(node);
         for (int i = 0; i < _replicas; i++)
         {
             int hash = GetHash(node.ToString() + i);

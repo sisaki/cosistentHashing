@@ -31,6 +31,9 @@ class Program
 
     static void DistributeKeys(ConsistentHash<string> consistentHash, List<string> keys)
     {
+        double knRatio = (double)keys.Count / consistentHash.NodeCount;
+        Console.WriteLine($"  k/n = {knRatio:F2}");
+
         var distribution = new Dictionary<string, List<string>>();
         foreach (var key in keys)
         {
